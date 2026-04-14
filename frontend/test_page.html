@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed - Media Visibility Tracking</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="facebook-feed">
+        <!-- CONTENU PRINCIPAL -->
+        <main class="feed-main">
+            <!-- HEADER -->
+            <header class="feed-header">
+                <h1>🎬 MediaTrack</h1>
+                <p>Fil d'activité en temps réel</p>
+            </header>
+
+            <!-- COMPOSER UN POST -->
+            <div class="composer-card">
+                <div class="composer-header">
+                    <div class="composer-avatar">👤</div>
+                    <input type="text" class="composer-input" placeholder="À quoi pensez-vous?">
+                </div>
+                <div class="composer-actions">
+                    <button class="composer-btn">📷 Photo/Vidéo</button>
+                    <button class="composer-btn">😊 Sentiment</button>
+                    <button class="composer-btn">📍 Lieu</button>
+                </div>
+            </div>
+
+            <!-- FEED DE POSTS -->
+            <div class="feed-posts" id="feedPosts">
+                <!-- Les posts seront générés dynamiquement -->
+            </div>
+
+            <div class="feed-loading" id="feedLoading" style="text-align: center; padding: 2rem; color: #666;">
+                Chargement des publications...
+            </div>
+        </main>
+    </div>
+
+    <!-- IMPORT DU MODULE DE TRACKING -->
+    <script src="tracking.js"></script>
+    <script src="api.js"></script>
+    <script>
+        // Initialiser le tracker
+        const tracker = new MediaVisibilityTracker('http://localhost:5000/api');
+
+        // Données des médias à tracker
+        const mediaData = [
+            { mediaId: 'post_1', title: 'Analyse Marketing Q1', type: 'image', image: 'Images_utilisable/_9fb91bd6-e1ff-4943-a7c5-70af22d3e01a.jpeg', author: 'Marie S.', time: 'Il y a 2h' },
+            { mediaId: 'post_2', title: 'Séminaire WebRTC', type: 'image', image: 'Images_utilisable/_e401f3be-d621-4044-87cd-8e27f7dddfc2.jpeg', author: 'Thomas D.', time: 'Il y a 4h' },
+            { mediaId: 'post_3', title: 'Innovation Technologique', type: 'gif', image: 'Images_utilisable/wired-outline-153-bar-chart-hover-slide.gif', author: 'Sophie L.', time: 'Il y a 6h' },
+            { mediaId: 'post_4', title: 'Guide de Sécurité', type: 'gif', image: 'Images_utilisable/wired-outline-500-fingerprint-security-hover-pinch.gif', author: 'Jean P.', time: 'Il y a 8h' },
+            { mediaId: 'post_5', title: 'Formation Continue', type: 'gif', image: 'Images_utilisable/wired-outline-486-school-hover-pinch.gif', author: 'Nicolas R.', time: 'Il y a 10h' },
+            { mediaId: 'post_6', title: 'Consultation Stratégique', type: 'gif', image: 'Images_utilisable/wired-outline-981-consultation-hover-pinch.gif', author: 'Alexandra B.', time: 'Il y a 12h' },
+            { mediaId: 'post_7', title: 'Sécurité Équité', type: 'gif', image: 'Images_utilisable/wired-outline-946-equity-security-hover-locked.gif', author: 'Marc V.', time: 'Il y a 1j' },
+            { mediaId: 'post_8', title: 'Code QR Innovant', type: 'gif', image: 'Images_utilisable/wired-outline-1335-qr-code-hover-pinch.gif', author: 'Lisa M.', time: 'Il y a 1j' }
+        ];
+
+        // Fonction pour créer les posts
+        function renderPosts() {
+            const feedPosts = document.getElementById('feedPosts');
+            const feedLoading = document.getElementById('feedLoading');
+            feedLoading.style.display = 'none';
+
+            feedPosts.innerHTML = mediaData.map((media, index) => `
+                <article class="post-card" id="post-${media.mediaId}">
+                    <div class="post-header">
+                        <div class="post-avatar">👤</div>
+                        <div class="post-author-info">
+                            <div class="post-author">${media.author}</div>
+                            <div class="post-time">${media.time}</div>
+                        </div>
+                        <button class="post-menu">⋮</button>
+                    </div>
+                    
+                    <div class="post-content">
+                        <p class="post-title">${media.title}</p>
+                    </div>
+                    
+                    <div class="post-image-container">
+                        <img src="${media.image}" alt="${media.title}" class="post-image" data-media-id="${media.mediaId}">
+                    </div>
+                    
+                    <div class="post-actions">
+                        <button class="post-action-btn">👍 J'aime</button>
+                        <button class="post-action-btn">💬 Commenter</button>
+                        <button class="post-action-btn">↗️ Partager</button>
+                    </div>
+                </article>
+            `).join('');
+
+            // Tracker tous les médias après rendu
+            setTimeout(() => {
+                mediaData.forEach(media => {
+                    const img = document.querySelector(`img[data-media-id="${media.mediaId}"]`);
+                    if (img) {
+                        tracker.trackElement(img, media.mediaId, media.type, { 
+                            title: media.title,
+                            image: media.image,
+                            author: media.author
+                        });
+                        // Créer le média avec son image et son titre
+                        createMedia(media.mediaId, media.title, media.type, media.image);
+                    }
+                });
+                console.log('✓ Tous les médias sont trackés');
+            }, 100);
+        }
+
+        // Mettre à jour les stats affichées
+        setInterval(() => {
+            const stats = tracker.getStats();
+            const now = new Date();
+
+            // Les sidebars sont supprimées, donc pas besoin de les mettre à jour
+        }, 1000);
+
+        function formatTime(ms) {
+            if (!ms) return '0s';
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            if (minutes > 0) return `${minutes}m`;
+            return `${seconds}s`;
+        }
+
+        // Initialiser au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPosts();
+        });
+    </script>
+</body>
+</html>
