@@ -13,7 +13,7 @@ Démarrage rapide du système de suivi de visibilité média en 5 minutes!
 ### Étape 1: Installer les Dépendances
 ```bash
 # Naviguer dans le dossier du projet
-cd Projet_CCC_4
+cd Projet_CCC_4/start.
 
 # Installer les dépendances Python
 pip install -r Documentation/requirements.txt
