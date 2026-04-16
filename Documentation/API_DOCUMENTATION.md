@@ -364,6 +364,3 @@ curl http://localhost:5000/api/stats/all
 - La base de données est SQLite3 stockée localement
 
 ---
-
-**Version de l'API**: 1.0.0
-**Dernière mise à jour**: 2024-04-01
