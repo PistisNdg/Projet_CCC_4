@@ -1,27 +1,27 @@
-# 🚀 Quick Start Guide - Media Visibility Tracking
+# Quick Start Guide - Media Visibility Tracking
 
 Démarrage rapide du système de suivi de visibilité média en 5 minutes!
 
-## 📋 Prérequis
+## Prérequis
 
 - Python 3.8+ installé
 - Git (optionnel)
 - Un navigateur web moderne
 
-## ⚡ Démarrage Rapide (5 min)
+## Démarrage Rapide (5 min)
 
 ### Étape 1: Installer les Dépendances
 ```bash
 # Naviguer dans le dossier du projet
-cd c:\NLP\NLP_Consulting\Programmes\Projet_Python\Projet_CCC
+cd Projet_CCC_4
 
 # Installer les dépendances Python
-pip install -r backend/requirements.txt
+pip install -r Documentation/requirements.txt
 ```
 
 ### Étape 2: Initialiser la Base de Données
 ```bash
-# Initialiser SQLite3
+# Initialiser SQLite3 (en cas de besoin mais il est déjà initialisé)
 python backend/database.py
 ```
 
@@ -39,15 +39,8 @@ Vous devriez voir quelque chose comme:
  * Running on http://0.0.0.0:5000
 ```
 
-### Étape 4: Générer des Données de Test (Optional)
-```bash
-# Dans un nouveau terminal
-python generate_test_data.py
-```
 
-Cela créera 10 médias, 50 sessions et des centaines d'événements.
-
-### Étape 5: Ouvrir les Pages Web
+### Étape 4: Ouvrir les Pages Web
 
 #### Option A: Serveur Local Python
 ```bash
